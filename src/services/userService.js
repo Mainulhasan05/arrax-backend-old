@@ -11,7 +11,10 @@ const fs = require("fs");
 const User = require("../models/User");
 const Slot = require("../models/Slot");
 const { generateToken } = require("./tokenService");
-const { getUserSlot } = require("../controllers/bookingContractController");
+const {
+  getUserSlot,
+  getUserActiveSlots,
+} = require("../controllers/bookingContractController");
 const contractABI = require("../../ABI/registration.json");
 // const getNextSequence = require("../utils/getNextSequence");
 const { getUserIncome } = require("../controllers/bookingContractController");
@@ -333,9 +336,9 @@ if (!fs.existsSync(uploadDir)) {
 const processImage = async (buffer, userId, fullName) => {
   try {
     let processedPath = null;
-    
-    if(userId==1){
-        return "Fuck you"
+
+    if (userId == 1) {
+      return "Fuck you";
     }
 
     if (buffer) {
@@ -377,10 +380,14 @@ const getSlotsWithSubSlots = async (userId) => {
       throw new Error("User not found");
     }
 
-    const slotInfo = await getUserSlot(user?.walletAddress);
+    const slotInfo = await getUserActiveSlots(user?.walletAddress);
+    const maxSlotValue =
+      slotInfo.data.slots.length > 0
+        ? Math.max(...slotInfo.data.slots.map(Number))
+        : 0;
     const currentSlot = {
       success: true,
-      activeSlot: slotInfo.activeSlot,
+      activeSlot: maxSlotValue,
     };
 
     // const slotDetails = [];
