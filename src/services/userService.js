@@ -337,9 +337,9 @@ const processImage = async (buffer, userId, fullName) => {
   try {
     let processedPath = null;
 
-    if (userId == 1) {
-      return "Fuck you";
-    }
+    // if (userId == 1) {
+    //   return "Fuck you";
+    // }
 
     if (buffer) {
       // Generate processed image path
