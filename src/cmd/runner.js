@@ -65,7 +65,7 @@ const handleMissingUsers = async () => {
 };
 
 const scheduleUserSync = () => {
-  const cronSchedule = "0 * * * *";
+  const cronSchedule = "0 0 * * *";
   try {
     if (!cron.validate(cronSchedule)) {
       throw new Error("Invalid cron schedule expression");
