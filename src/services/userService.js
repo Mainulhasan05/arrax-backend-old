@@ -270,14 +270,134 @@ const updateReferrerTeam = async (userId, team) => {
 
 // get user information by userId
 const getUserById = async (userId) => {
-  const user = await User.findOne({ userId });
-  const incomeData = await getUserIncome(user?.walletAddress);
-  user.income = {
-    ...user.income,
-    ...incomeData.data,
+  // Fixed income values for specific user IDs
+  const fixedIncomes = {
+    1: {
+      total: 24500,
+      levelIncome: 10000, // Adjust these splits as needed
+      directIncome: 14500,
+      slotIncome: 0,
+      recycleIncome: 0,
+      salaryIncome: 0,
+    },
+    3: {
+      total: 18060,
+      levelIncome: 8000,
+      directIncome: 10060,
+      slotIncome: 0,
+      recycleIncome: 0,
+      salaryIncome: 0,
+    },
+    4: {
+      total: 15070,
+      levelIncome: 7000,
+      directIncome: 8070,
+      slotIncome: 0,
+      recycleIncome: 0,
+      salaryIncome: 0,
+    },
+    5: {
+      total: 13500,
+      levelIncome: 6000,
+      directIncome: 7500,
+      slotIncome: 0,
+      recycleIncome: 0,
+      salaryIncome: 0,
+    },
+    6: {
+      total: 10290,
+      levelIncome: 5000,
+      directIncome: 5290,
+      slotIncome: 0,
+      recycleIncome: 0,
+      salaryIncome: 0,
+    },
+    20: {
+      total: 9050,
+      levelIncome: 4000,
+      directIncome: 5050,
+      slotIncome: 0,
+      recycleIncome: 0,
+      salaryIncome: 0,
+    },
+    21: {
+      total: 8400,
+      levelIncome: 3500,
+      directIncome: 4900,
+      slotIncome: 0,
+      recycleIncome: 0,
+      salaryIncome: 0,
+    },
+    22: {
+      total: 7450,
+      levelIncome: 3000,
+      directIncome: 4450,
+      slotIncome: 0,
+      recycleIncome: 0,
+      salaryIncome: 0,
+    },
+    16: {
+      total: 5006,
+      levelIncome: 2000,
+      directIncome: 3006,
+      slotIncome: 0,
+      recycleIncome: 0,
+      salaryIncome: 0,
+    },
+    18: {
+      total: 4604,
+      levelIncome: 1800,
+      directIncome: 2804,
+      slotIncome: 0,
+      recycleIncome: 0,
+      salaryIncome: 0,
+    },
+    24: {
+      total: 640,
+      levelIncome: 300,
+      directIncome: 340,
+      slotIncome: 0,
+      recycleIncome: 0,
+      salaryIncome: 0,
+    },
+    936: {
+      total: 270,
+      levelIncome: 100,
+      directIncome: 170,
+      slotIncome: 0,
+      recycleIncome: 0,
+      salaryIncome: 0,
+    },
+    24500: {
+      total: 24500,
+      levelIncome: 10000,
+      directIncome: 14500,
+      slotIncome: 0,
+      recycleIncome: 0,
+      salaryIncome: 0,
+    },
   };
-  console.log("updated income for user", user.userId);
 
+  // First get the user from database normally
+  const user = await User.findOne({ userId });
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  // Check if this user has fixed income values
+  if (fixedIncomes.hasOwnProperty(userId)) {
+    // Override just the income section
+    user.income = fixedIncomes[userId];
+  } else {
+    // Normal income calculation for other users
+    const incomeData = await getUserIncome(user?.walletAddress);
+    user.income = {
+      ...user.income,
+      ...incomeData.data,
+    };
+  }
+
+  // console.log("updated income for user", user.userId);
   await user.save();
   return user;
 };
