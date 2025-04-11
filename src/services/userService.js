@@ -268,7 +268,6 @@ const updateReferrerTeam = async (userId, team) => {
   }
 };
 
-// get user information by userId
 const getUserById = async (userId) => {
   // Fixed income values for specific user IDs
   const fixedIncomes = {
@@ -384,20 +383,29 @@ const getUserById = async (userId) => {
     throw new Error("User not found");
   }
 
+  // Get the user's current income data
+  const incomeData = await getUserIncome(user?.walletAddress);
+
   // Check if this user has fixed income values
   if (fixedIncomes.hasOwnProperty(userId)) {
-    // Override just the income section
-    user.income = fixedIncomes[userId];
+    // Add the fixed income to the existing income data
+    user.income = {
+      total:
+        (parseFloat(incomeData.data.total) || 0) + fixedIncomes[userId].total,
+      levelIncome: parseFloat(incomeData.data.levelIncome) || 0,
+      directIncome: parseFloat(incomeData.data.directIncome) || 0,
+      slotIncome: parseFloat(incomeData.data.slotIncome) || 0,
+      recycleIncome: parseFloat(incomeData.data.recycleIncome) || 0,
+      salaryIncome: parseFloat(incomeData.data.salaryIncome) || 0,
+    };
   } else {
     // Normal income calculation for other users
-    const incomeData = await getUserIncome(user?.walletAddress);
     user.income = {
       ...user.income,
       ...incomeData.data,
     };
   }
 
-  // console.log("updated income for user", user.userId);
   await user.save();
   return user;
 };
