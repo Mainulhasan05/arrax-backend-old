@@ -352,7 +352,7 @@ const getUserById = async (userId) => {
       salaryIncome: 0,
     },
     24: {
-      total: 640,
+      total: 1040,
       levelIncome: 321.91,
       directIncome: 486,
       slotIncome: 0,
