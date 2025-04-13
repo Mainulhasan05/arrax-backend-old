@@ -329,8 +329,8 @@ const getUserById = async (userId) => {
     },
     22: {
       total: 7450,
-      levelIncome: 0,
-      directIncome: 0,
+      levelIncome: 1121.91,
+      directIncome: 3412,
       slotIncome: 0,
       recycleIncome: 0,
       salaryIncome: 0,
@@ -353,8 +353,8 @@ const getUserById = async (userId) => {
     },
     24: {
       total: 640,
-      levelIncome: 0,
-      directIncome: 0,
+      levelIncome: 321.91,
+      directIncome: 486,
       slotIncome: 0,
       recycleIncome: 0,
       salaryIncome: 0,
@@ -392,8 +392,12 @@ const getUserById = async (userId) => {
     user.income = {
       total:
         (parseFloat(incomeData.data.total) || 0) + fixedIncomes[userId].total,
-      levelIncome: parseFloat(incomeData.data.levelIncome) || 0,
-      directIncome: parseFloat(incomeData.data.directIncome) || 0,
+      levelIncome:
+        (parseFloat(incomeData.data.levelIncome) || 0) +
+        fixedIncomes[userId].levelIncome,
+      directIncome:
+        (parseFloat(incomeData.data.directIncome) || 0) +
+        fixedIncomes[userId].directIncome,
       slotIncome: parseFloat(incomeData.data.slotIncome) || 0,
       recycleIncome: parseFloat(incomeData.data.recycleIncome) || 0,
       salaryIncome: parseFloat(incomeData.data.salaryIncome) || 0,
